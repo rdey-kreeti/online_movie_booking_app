@@ -1,0 +1,19 @@
+.flash-message {
+  background-color: #009cf6;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 600px;
+  transform: translateX(-50%);
+  border-color: 1px solid #0f84c8;
+
+  &.danger {
+    background-color: #cc0000;
+  }
+}

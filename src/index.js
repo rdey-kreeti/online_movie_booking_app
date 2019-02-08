@@ -5,12 +5,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import AdminDashboard from './components/AdminDashboard';
+import LoginPage from './components/LoginPage';
 
 const routing = (
   <Router>
     <Switch>
       <Route exact path="/" component={App}/>
-      <Route exact path="/adminDashboard" component={AdminDashboard}/>
+      <Route path="/login" component={LoginPage}/>
+      <Route path="/adminDashboard" component={AdminDashboard}/>
     </Switch>
   </Router>
 )

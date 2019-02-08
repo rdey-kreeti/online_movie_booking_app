@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './index.scss'
+
 const TextFieldGroup = ({label, type, name, value, onChange, placeholder, error}) => {
   return (
-    <div>
-      <label>{label}</label>
+    <div className="input-group">
+      <label className="input-group__label">{label}</label>
       <input
         type={type}
         placeholder={placeholder}
         name={name}
         value={value}
         onChange={onChange}
+        className={`input-group__input ${error ? 'error' : ''}`}
       />
-      {error && <span>{error}</span>}
+      {error && <span className="input-group__error">{error}</span>}
     </div>
   )
 }

@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import TextFieldGroup from '../common/TextFieldGroup';
+import FlashMessagePopUp from '../common/FlashMessagePopUp';
+
+import './index.scss';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -8,7 +11,8 @@ class LoginForm extends Component {
       admins: this.props.users,
       email: '',
       password: '',
-      errors: {}
+      errors: {},
+      flashMessage: null
     }
   }
 
@@ -22,6 +26,7 @@ class LoginForm extends Component {
     if(isInputsValid) {
       const isUserValid = this.validateUser(this.state);
       if(isUserValid) {
+        localStorage.setItem('adminLoggedIn', isUserValid)
         this.props.history.push('/adminDashboard');
       }
     }
@@ -32,6 +37,12 @@ class LoginForm extends Component {
     let isValid = false;
     if (!data.email.length) {
       errors.email = "Email can't be blank";
+    } else if (data.email.length) {
+      const emailReg = RegExp('.+\@.+\..+');
+      const isEmailFieldValid = emailReg.test(data.email.toLowerCase());
+      if(!isEmailFieldValid) {
+        errors.email = "Email is invalid"
+      }
     }
     if (!data.password.length) {
       errors.password = "Password can't be blank";
@@ -67,21 +78,25 @@ class LoginForm extends Component {
       if(matchedAdmin[0].password === password) {
         isUserValid= true;
       } else {
-        console.log("You have entered wrong password");
+        this.setState({ flashMessage: { type: "danger", messages: ["You have entered a wrong password"] } });
       }
     } else {
-      console.log("User not found");
+      this.setState({ flashMessage: { type: "danger", messages: ["User not found"] } });
     }
 
     return isUserValid;
   }
 
   render() {
+    const {flashMessage} = this.state;
     return (
       <React.Fragment>
-        <TextFieldGroup label="email" type="email" name="email" placeholder="email" onChange={this.onChange} value={this.state.email} error={this.state.errors.email} />
-        <TextFieldGroup label="password" type="password" name="password" placeholder="password" onChange={this.onChange} value={this.state.password} error={this.state.errors.password} />
-        <button type="submit" onClick={this.onSubmit}>Login</button>
+        {flashMessage && <FlashMessagePopUp flashMessage={this.state.flashMessage}/>}
+        <section className="user-authentication">
+          <TextFieldGroup label="email" type="email" name="email" placeholder="E-mail Address" onChange={this.onChange} value={this.state.email} error={this.state.errors.email} />
+          <TextFieldGroup label="password" type="password" name="password" placeholder="Password" onChange={this.onChange} value={this.state.password} error={this.state.errors.password} />
+          <button type="submit" className="btn primary-btn btn-block" onClick={this.onSubmit}>Login</button>
+        </section>
       </React.Fragment>
     )
   }
