@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
+import Header from '../common/Header';
 
 class AdminDashboard extends Component {
   componentDidMount() {
@@ -8,7 +10,13 @@ class AdminDashboard extends Component {
   }
   render() {
     return (
-      <h3>Succesfully Logged in</h3>
+      <section>
+        <Header />
+        <ul>
+          <li><Link to="/theatres">Theatres</Link></li>
+          <li><Link to="/movies">Movies</Link></li>
+        </ul>
+      </section>
     )
   }
 }

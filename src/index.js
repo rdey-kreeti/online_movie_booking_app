@@ -6,13 +6,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import AdminDashboard from './components/AdminDashboard';
 import LoginPage from './components/LoginPage';
+import CreateTheatreForm from './components/CreateTheatreForm';
+import Theatres from './components/Theatres';
+
 
 const routing = (
   <Router>
     <Switch>
       <Route exact path="/" component={App}/>
       <Route path="/login" component={LoginPage}/>
-      <Route path="/adminDashboard" component={AdminDashboard}/>
+      <Route path="/admin-dashboard" component={AdminDashboard}/>
+      <Route path="/theatres" component={Theatres}/>
+      <Route path="/create-theatre" component={CreateTheatreForm}/>
     </Switch>
   </Router>
 )

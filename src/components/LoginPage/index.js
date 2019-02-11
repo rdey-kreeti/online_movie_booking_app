@@ -6,7 +6,7 @@ const ADMINS = [{email: 'a@a.com', password: '1234567'}];
 class LoginPage extends Component {
   componentDidMount() {
     if(localStorage.getItem('adminLoggedIn') !== null) {
-      this.props.history.push('/adminDashboard');
+      this.props.history.push('/admin-dashboard');
     }
   }
 

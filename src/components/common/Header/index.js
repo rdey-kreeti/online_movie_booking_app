@@ -17,7 +17,7 @@ class Header extends Component {
     }
   }
 
-  logout = (e) => {
+  logout = () => {
     localStorage.removeItem("adminLoggedIn");
     this.setState({isLogin: false})
   }
