@@ -8,6 +8,7 @@ import AdminDashboard from './components/AdminDashboard';
 import LoginPage from './components/LoginPage';
 import CreateTheatreForm from './components/CreateTheatreForm';
 import Theatres from './components/Theatres';
+import EditTheatre from './components/EditTheatre';
 
 
 const routing = (
@@ -16,7 +17,8 @@ const routing = (
       <Route exact path="/" component={App}/>
       <Route path="/login" component={LoginPage}/>
       <Route path="/admin-dashboard" component={AdminDashboard}/>
-      <Route path="/theatres" component={Theatres}/>
+      <Route exact path="/theatres" component={Theatres}/>
+      <Route exact path={`/theatres/:id`} component={EditTheatre}/>
       <Route path="/create-theatre" component={CreateTheatreForm}/>
     </Switch>
   </Router>
