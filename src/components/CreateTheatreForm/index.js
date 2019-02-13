@@ -25,7 +25,7 @@ class CreateTheatreForm extends Component {
 
     if (localStorage.getItem('theatres')) {
       theatreList = JSON.parse(localStorage.getItem('theatres'));
-      hallId = theatreList[theatreList.length - 1].id + 1;
+      hallId = theatreList.length ? theatreList[theatreList.length - 1].id + 1 : 1;
     } else {
       theatreList = [];
       hallId = 1;
@@ -42,7 +42,6 @@ class CreateTheatreForm extends Component {
   }
 
   render() {
-    console.log('hit from create form');
     return (
       <form>
         <TextFieldGroup label="Hall Name" name="hallName" type="text" value={this.state.hallName} placeholder="Hall Name" onChange={this.onChange}/>

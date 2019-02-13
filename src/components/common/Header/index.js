@@ -30,7 +30,8 @@ class Header extends Component {
     return (
       <nav className="header">
         <ul className="header__list">
-          <li className="header__list__item"><Link className="header__list__item__link" to="/login">{isLogin ? logoutLink : loginLink}</Link></li>
+        <li className="header__list__item"><Link className="header__list__item__link" to="/admin-dashboard">Admin Dashboard</Link></li>
+          <li className="header__list__item">{isLogin ? logoutLink : loginLink}</li>
         </ul>
       </nav>
     )

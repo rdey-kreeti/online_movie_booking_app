@@ -35,7 +35,6 @@ class Theatres extends Component {
   }
 
   handleDeleteTheatre = (id) => {
-    console.log(id);
     let {theatres} = this.state;
     theatres = theatres.filter(theatre => theatre.id !== id);
     this.setState({theatres});

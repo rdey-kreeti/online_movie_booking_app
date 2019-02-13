@@ -9,6 +9,8 @@ import LoginPage from './components/LoginPage';
 import CreateTheatreForm from './components/CreateTheatreForm';
 import Theatres from './components/Theatres';
 import EditTheatre from './components/EditTheatre';
+import Movies from './components/Movies';
+import AddMovie from './components/AddMovie';
 
 
 const routing = (
@@ -18,8 +20,10 @@ const routing = (
       <Route path="/login" component={LoginPage}/>
       <Route path="/admin-dashboard" component={AdminDashboard}/>
       <Route exact path="/theatres" component={Theatres}/>
+      <Route exact path="/theatres/create-theatre" component={CreateTheatreForm}/>
       <Route exact path={`/theatres/:id`} component={EditTheatre}/>
-      <Route path="/create-theatre" component={CreateTheatreForm}/>
+      <Route exact path="/movies" component={Movies}/>
+      <Route path="/add-movie" component={AddMovie}/>
     </Switch>
   </Router>
 )
