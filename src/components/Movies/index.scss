@@ -1,0 +1,45 @@
+.movies {
+  display: flex;
+
+  &__item {
+    background-color: #fff;
+    margin: 0 0 15px 15px;
+
+    &__img {
+      width: 250px;
+      height: 350px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+
+    &__details {
+      background-color: #000;
+      color: #fff;
+      padding: 8px;
+
+      &__name {
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      &__others {
+        font-size: 13px;
+        margin-top: 5px;
+
+        &__item {
+          background-color: #006cf6;
+          padding: 3px 20px;
+          border-radius: 10px;
+          display: inline-block;
+          margin-left: 8px;
+          text-transform: capitalize;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}

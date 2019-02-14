@@ -1,0 +1,12 @@
+.checkbox-label {
+  display: inline-block;
+  align-items: center;
+
+  &__input {
+    margin: 0 5px 0 0;
+  }
+
+  &__text {
+    line-height: 1;
+  }
+}

@@ -18,11 +18,11 @@ class Theatres extends Component {
   }
 
   createShowtimeCell = (obj,index) => {
-    const time = obj.showTimings[index];
-    if (time) {
-      return <td>{this.twentyFourHrsConverter(time)}</td>
+    const showTiming = obj.showTimings[index];
+    if (showTiming) {
+      return <td key={index}>{this.twentyFourHrsConverter(showTiming.timing)}</td>
     }
-    return <td>-</td>
+    return <td key={index}>-</td>
   }
 
   twentyFourHrsConverter = (time) => {
@@ -48,7 +48,7 @@ class Theatres extends Component {
       <section>
         <Header/>
         <ul>
-          <li><Link to="/create-theatre">Create a Theatre</Link></li>
+          <li><Link to="/theatres/create-theatre">Create a Theatre</Link></li>
         </ul>
         <table>
           <thead>

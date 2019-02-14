@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './index.scss'
 
-const TextFieldGroup = ({label, type, name, value, onChange, placeholder, error}) => {
+const TextFieldGroup = ({label, type, name, value, onChange, placeholder, error, required}) => {
   return (
     <div className="input-group">
       <label className="input-group__label">{label}</label>
@@ -14,6 +14,7 @@ const TextFieldGroup = ({label, type, name, value, onChange, placeholder, error}
         value={value}
         onChange={onChange}
         className={`input-group__input ${error ? 'error' : ''}`}
+        required={required ? true : false}
       />
       {error && <span className="input-group__error">{error}</span>}
     </div>
