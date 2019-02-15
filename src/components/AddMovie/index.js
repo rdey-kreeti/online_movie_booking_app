@@ -15,7 +15,8 @@ class AddMovie extends Component {
       movieFormat: '',
       movieGenre: '',
       flashMessage: null,
-      theatres: []
+      theatres: [],
+      selectedTheatres: []
     }
   }
 
@@ -29,16 +30,22 @@ class AddMovie extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  handleCheck= (isChecked, value) => {
-    let checkedItems;
-    console.log(isChecked, value)
+  handleCheck= (isChecked, value, dataValue) => {
+    let {selectedTheatres} = this.state;
+
+    if(isChecked) {
+      this.setState({selectedTheatres: [...this.state.selectedTheatres, dataValue]})
+    } else if (!isChecked) {
+      const updatedSelectedTheatres = selectedTheatres.filter(item => !((item.theatreId === dataValue.theatreId) && (item.showTimeId === dataValue.showTimeId)));
+      this.setState({selectedTheatres: updatedSelectedTheatres});
+    }
   }
 
   onSubmit = (e) => {
     e.preventDefault();
     let movies;
     let movieId;
-    const {movieImage, movieName, movieCategory, movieFormat, movieGenre} = this.state;
+    const {movieImage, movieName, movieCategory, movieFormat, movieGenre, selectedTheatres} = this.state;
 
     if(localStorage.getItem('movies')) {
       movies = JSON.parse(localStorage.getItem('movies'));
@@ -49,7 +56,7 @@ class AddMovie extends Component {
     }
 
     if (movieImage.trim().length && movieName.trim().length && movieCategory.trim().length && movieFormat.trim().length && movieGenre.trim().length) {
-      movies = [...movies, {id: movieId, image: movieImage, name: movieName, category: movieCategory, genre: movieGenre, format: movieFormat }];
+      movies = [...movies, {id: movieId, image: movieImage, name: movieName, category: movieCategory, genre: movieGenre, format: movieFormat, associatedTheatres: selectedTheatres }];
       localStorage.setItem('movies', JSON.stringify(movies));
       this.setState({movieImage: '', movieName: '', movieCategory: '', movieFormat: '', movieGenre: ''});
       this.props.history.push('/movies');
@@ -81,7 +88,7 @@ class AddMovie extends Component {
                   <span>{theatre.name}</span>
                   {theatre.showTimings.map((timing) => {
                     return (
-                      <CheckboxWithLabel label={timing.timing} name={timing.timing} handleCheck={this.handleCheck}/>
+                      <CheckboxWithLabel label={timing.timing} name={timing.timing} dataValue={{theatreId: theatre.id, showTimeId: timing.id}} handleCheck={this.handleCheck}/>
                     )})}
                 </li>
               )

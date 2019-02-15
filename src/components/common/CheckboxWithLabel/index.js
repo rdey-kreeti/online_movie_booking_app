@@ -16,7 +16,7 @@ class Checkbox extends Component {
     this.setState({
       isChecked: !this.state.isChecked,
       inputValue: e.target.name
-    }, () => this.props.handleCheck(this.state.isChecked, this.state.inputValue));
+    }, () => this.props.handleCheck(this.state.isChecked, this.state.inputValue, this.props.dataValue));
   }
 
   render() {
@@ -26,6 +26,8 @@ class Checkbox extends Component {
           type="checkbox"
           className="checkbox-label__input"
           name={this.props.label}
+          {...this.props.value && {'value': `${this.props.value}`}}
+          {...this.props.dataValue && {'data-value': `${this.props.dataValue}`}}
           checked={this.state.isChecked}
           onChange={this.handleOnChange}
         />
@@ -38,6 +40,8 @@ class Checkbox extends Component {
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  dataValue: PropTypes.object,
   handleCheck: PropTypes.func.isRequired
 }
 
