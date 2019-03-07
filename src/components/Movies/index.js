@@ -21,6 +21,7 @@ class Movies extends Component {
 
   render() {
     const {movies} = this.state;
+
     return (
       <section>
         <Header/>
@@ -36,6 +37,9 @@ class Movies extends Component {
                     <span className="movies__item__details__others__item">{movie.category.toUpperCase()}</span>
                     <span className="movies__item__details__others__item">{movie.format}</span>
                   </section>
+                </section>
+                <section>
+                  <Link to={`/movies/${movie.id}`}>Edit</Link>
                 </section>
               </li>
             )

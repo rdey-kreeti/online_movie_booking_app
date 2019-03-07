@@ -4,7 +4,7 @@ import SelectGroup from '../common/SelectGroup';
 import CheckboxWithLabel from '../common/CheckboxWithLabel';
 import FlashMessage from '../common/FlashMessagePopUp';
 
-class AddMovie extends Component {
+class EditMovie extends Component {
   constructor(props) {
     super(props);
 
@@ -21,13 +21,35 @@ class AddMovie extends Component {
   }
 
   componentDidMount = () => {
-    if (localStorage.getItem('theatres')) {
-      this.setState({theatres: JSON.parse(localStorage.getItem('theatres'))});
+    let theatres;
+    const {editableMovie} = this.findEditableMovie();
+
+    if(localStorage.getItem('theatres')) {
+      theatres = JSON.parse(localStorage.getItem('theatres'))
     }
+
+    this.setState({
+      movieImage: editableMovie.image,
+      movieName: editableMovie.name,
+      movieCategory: editableMovie.category,
+      movieFormat: editableMovie.format,
+      movieGenre: editableMovie.genre,
+      theatres: theatres
+    })
+  }
+
+  findEditableMovie = () => {
+    let movies, editableMovie;
+    const editableMovieId = parseInt(this.props.match.params.id, 10);
+    if(localStorage.getItem('movies')) {
+      movies = JSON.parse(localStorage.getItem('movies'));
+    }
+    editableMovie = movies.find(movie => movie.id === editableMovieId);
+    return { movies, editableMovie };
   }
 
   onChange = (e) => {
-    this.setState({[e.target.name]: e.target.value});
+    this.setState({[e.target.name]: e.target.value})
   }
 
   handleCheck= (isChecked, value, dataValue) => {
@@ -43,17 +65,8 @@ class AddMovie extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    let movies;
-    let movieId;
-    const {movieImage, movieName, movieCategory, movieFormat, movieGenre, selectedTheatres} = this.state;
-
-    if(localStorage.getItem('movies')) {
-      movies = JSON.parse(localStorage.getItem('movies'));
-      movieId = movies.length ? movies[movies.length - 1].id + 1 : 1;
-    } else {
-      movies = [];
-      movieId = 1;
-    }
+    const {movies, editableMovie} = this.findEditableMovie();
+    const {movieImage, movieName, movieCategory, movieFormat, movieGenre} = this.state;
 
     const mergeShowTimeIds = () => {
       let {selectedTheatres} = this.state;
@@ -74,21 +87,26 @@ class AddMovie extends Component {
     }
 
     if (movieImage.trim().length && movieName.trim().length && movieCategory.trim().length && movieFormat.trim().length && movieGenre.trim().length) {
-      movies = [...movies, {id: movieId, image: movieImage, name: movieName, category: movieCategory, genre: movieGenre, format: movieFormat, associatedTheatres: mergeShowTimeIds() }];
+      editableMovie.image = movieImage;
+      editableMovie.name = movieName;
+      editableMovie.category = movieCategory;
+      editableMovie.category = movieCategory;
+      editableMovie.genre = movieGenre;
+      editableMovie.format = movieFormat;
+      editableMovie.associatedTheatres = mergeShowTimeIds();
       localStorage.setItem('movies', JSON.stringify(movies));
-      this.setState({movieImage: '', movieName: '', movieCategory: '', movieFormat: '', movieGenre: ''});
       this.props.history.push('/movies');
-    } else {
-      this.setState({flashMessage: {type: 'danger', messages: ['Please fill out all the fields']}});
     }
   }
 
   render() {
     const {flashMessage, theatres} = this.state;
+    const {editableMovie} = this.findEditableMovie();
     const movieCategoryOptions = ['U', 'A', 'U/A'];
     const movieGenres = [ "Comedy", "Fantasy", "Crime", "Drama", "Music", "Adventure", "History", "Thriller",
       "Animation", "Family", "Mystery", "Biography", "Action", "Film-Noir", "Romance", "Sci-Fi", "War",     "Western", "Horror", "Musical", "Sport" ];
     const movieFormat = ['2D', '3D'];
+    const associatedTheatres = editableMovie.associatedTheatres;
 
     return (
       <form>
@@ -101,12 +119,21 @@ class AddMovie extends Component {
           <span>Select a theatre</span>
           <ul>
             {theatres.map(theatre => {
+              const matchedAssociatedTheatre = associatedTheatres.find(el => el.theatreId === theatre.id);
+              const associatedTheatreTimingIds = matchedAssociatedTheatre === undefined ? [] : matchedAssociatedTheatre.showTimeIds;
+
               return (
                 <li>
                   <span>{theatre.name}</span>
                   {theatre.showTimings.map((timing) => {
                     return (
-                      <CheckboxWithLabel label={timing.timing} name={timing.timing} dataValue={{theatreId: theatre.id, showTimeId: timing.id}} handleCheck={this.handleCheck}/>
+                      <CheckboxWithLabel
+                        label={timing.timing}
+                        name={timing.timing}
+                        dataValue={{theatreId: theatre.id, showTimeId: timing.id}}
+                        handleCheck={this.handleCheck}
+                        isChecked={associatedTheatreTimingIds.includes(timing.id)}
+                      />
                     )})}
                 </li>
               )
@@ -120,4 +147,4 @@ class AddMovie extends Component {
   }
 }
 
-export default AddMovie;
+export default EditMovie;

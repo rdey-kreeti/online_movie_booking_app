@@ -11,6 +11,7 @@ import Theatres from './components/Theatres';
 import EditTheatre from './components/EditTheatre';
 import Movies from './components/Movies';
 import AddMovie from './components/AddMovie';
+import EditMovie from './components/EditMovie';
 
 
 const routing = (
@@ -23,6 +24,7 @@ const routing = (
       <Route exact path="/theatres/create-theatre" component={CreateTheatreForm}/>
       <Route exact path={`/theatres/:id`} component={EditTheatre}/>
       <Route exact path="/movies" component={Movies}/>
+      <Route exact path={`/movies/:id`} component={EditMovie}/>
       <Route path="/add-movie" component={AddMovie}/>
     </Switch>
   </Router>

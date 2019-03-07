@@ -7,7 +7,7 @@ class Checkbox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isChecked: false,
+      isChecked: this.props.isChecked || false,
       inputValue: ''
     };
   }
@@ -41,6 +41,7 @@ Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
+  isChecked: PropTypes.bool,
   dataValue: PropTypes.object,
   handleCheck: PropTypes.func.isRequired
 }
