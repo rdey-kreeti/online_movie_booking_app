@@ -19,6 +19,13 @@ class Movies extends Component {
     }
   }
 
+  handleDeleteMovie = (id) => {
+    const {movies} = this.state;
+    const updateMovieList = movies.filter(movie => movie.id !== id);
+    this.setState({movies: updateMovieList});
+    localStorage.setItem('movies', JSON.stringify(updateMovieList));
+  }
+
   render() {
     const {movies} = this.state;
 
@@ -40,12 +47,13 @@ class Movies extends Component {
                 </section>
                 <section>
                   <Link to={`/movies/${movie.id}`}>Edit</Link>
+                  <span onClick={() => this.handleDeleteMovie(movie.id)}>Delete</span>
                 </section>
               </li>
             )
           })}
-          <li><Link to="/add-movie">Add a Movie</Link></li>
         </ul>
+        <Link to="/add-movie">Add a Movie</Link>
       </section>
     )
   }

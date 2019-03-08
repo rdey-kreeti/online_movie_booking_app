@@ -33,7 +33,7 @@ class CreateTheatreForm extends Component {
 
     let showTimings = [showtime1, showtime2, showtime3, showtime4].filter(showtime => showtime.trim().length);
     showTimings = showTimings.map((timing, index) => {
-      return { id: (index + 1), timing: timing }
+      return { id: (index + 1), timing: timing, booked: false }
     })
 
     if (hallName.trim().length && showTimings.length) {

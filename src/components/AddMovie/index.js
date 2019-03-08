@@ -31,13 +31,22 @@ class AddMovie extends Component {
   }
 
   handleCheck= (isChecked, value, dataValue) => {
-    let {selectedTheatres} = this.state;
+    const {theatres, selectedTheatres} = this.state;
+    let updateTheatre;
+
 
     if(isChecked) {
-      this.setState({selectedTheatres: [...this.state.selectedTheatres, dataValue]})
+      updateTheatre = theatres.find(theatre => theatre.id === dataValue.theatreId);
+      updateTheatre = updateTheatre.showTimings.find(showTime => showTime.id === dataValue.showTimeId);
+      updateTheatre.booked = true;
+      this.setState({theatres: theatres, selectedTheatres: [...this.state.selectedTheatres, dataValue]});
+
     } else if (!isChecked) {
       const updatedSelectedTheatres = selectedTheatres.filter(item => !((item.theatreId === dataValue.theatreId) && (item.showTimeId === dataValue.showTimeId)));
-      this.setState({selectedTheatres: updatedSelectedTheatres});
+      updateTheatre = theatres.find(theatre => theatre.id === dataValue.theatreId);
+      updateTheatre = theatres.showTimings.find(showTime => showTime.id === dataValue.showTimeId);
+      updateTheatre.booked = false;
+      this.setState({theatres: theatres, selectedTheatres: updatedSelectedTheatres});
     }
   }
 
@@ -45,7 +54,7 @@ class AddMovie extends Component {
     e.preventDefault();
     let movies;
     let movieId;
-    const {movieImage, movieName, movieCategory, movieFormat, movieGenre, selectedTheatres} = this.state;
+    const {movieImage, movieName, movieCategory, movieFormat, movieGenre, theatres} = this.state;
 
     if(localStorage.getItem('movies')) {
       movies = JSON.parse(localStorage.getItem('movies'));
@@ -76,11 +85,16 @@ class AddMovie extends Component {
     if (movieImage.trim().length && movieName.trim().length && movieCategory.trim().length && movieFormat.trim().length && movieGenre.trim().length) {
       movies = [...movies, {id: movieId, image: movieImage, name: movieName, category: movieCategory, genre: movieGenre, format: movieFormat, associatedTheatres: mergeShowTimeIds() }];
       localStorage.setItem('movies', JSON.stringify(movies));
+      localStorage.setItem('theatres', JSON.stringify(theatres));
       this.setState({movieImage: '', movieName: '', movieCategory: '', movieFormat: '', movieGenre: ''});
       this.props.history.push('/movies');
     } else {
       this.setState({flashMessage: {type: 'danger', messages: ['Please fill out all the fields']}});
     }
+  }
+
+  onCancel = () => {
+    this.props.history.push('/movies');
   }
 
   render() {
@@ -93,7 +107,7 @@ class AddMovie extends Component {
     return (
       <form>
         <TextFieldGroup label="Movie Image" name="movieImage" type="text" value={this.state.movieImage} placeholder="Enter an image url" onChange={this.onChange} required/>
-        <TextFieldGroup label="Movie Name" name="movieName" type="text" value={this.state.movieName} placeholder="Hall Name" onChange={this.onChange}/>
+        <TextFieldGroup label="Movie Name" name="movieName" type="text" value={this.state.movieName} placeholder="Movie Name" onChange={this.onChange}/>
         <SelectGroup label="Movie Category" name="movieCategory" value={this.state.movieCategory} defaultOption="Select a category" options={movieCategoryOptions} onChange={this.onChange}/>
         <SelectGroup label="Movie Genre" name="movieGenre" value={this.state.movieGenre} defaultOption="Select a genre" options={movieGenres} onChange={this.onChange}/>
         <SelectGroup label="Movie Format" name="movieFormat" value={this.state.movieFormat} defaultOption="Select a format" options={movieFormat} onChange={this.onChange}/>
@@ -114,6 +128,7 @@ class AddMovie extends Component {
           </ul>
         </section>
         <button type="submit" onClick={this.onSubmit}>Create</button>
+        <button type="button" onClick={this.onCancel}>Cancel</button>
         {flashMessage ? <FlashMessage flashMessage={this.state.flashMessage}/> : null }
       </form>
     )
