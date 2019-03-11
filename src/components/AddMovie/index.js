@@ -44,7 +44,7 @@ class AddMovie extends Component {
     } else if (!isChecked) {
       const updatedSelectedTheatres = selectedTheatres.filter(item => !((item.theatreId === dataValue.theatreId) && (item.showTimeId === dataValue.showTimeId)));
       updateTheatre = theatres.find(theatre => theatre.id === dataValue.theatreId);
-      updateTheatre = theatres.showTimings.find(showTime => showTime.id === dataValue.showTimeId);
+      updateTheatre = updateTheatre.showTimings.find(showTime => showTime.id === dataValue.showTimeId);
       updateTheatre.booked = false;
       this.setState({theatres: theatres, selectedTheatres: updatedSelectedTheatres});
     }

@@ -59,20 +59,28 @@ class EditMovie extends Component {
   }
 
   handleCheck = (isChecked, value, dataValue) => {
-    const {selectedTheatres} = this.state;
+    const {theatres, selectedTheatres} = this.state;
+    let updateTheatre;
 
     if(isChecked) {
-      this.setState({selectedTheatres: [...this.state.selectedTheatres, dataValue]})
+      updateTheatre = theatres.find(theatre => theatre.id === dataValue.theatreId);
+      updateTheatre = updateTheatre.showTimings.find(showTime => showTime.id === dataValue.showTimeId);
+      updateTheatre.booked = true;
+      this.setState({theatres: theatres, selectedTheatres: [...this.state.selectedTheatres, dataValue]})
     } else if (!isChecked) {
       const updatedSelectedTheatres = selectedTheatres.filter(item => !((item.theatreId === dataValue.theatreId) && (item.showTimeId === dataValue.showTimeId)));
-      this.setState({selectedTheatres: updatedSelectedTheatres});
+      updateTheatre = theatres.find(theatre => theatre.id === dataValue.theatreId);
+      updateTheatre = updateTheatre.showTimings.find(showTime => showTime.id === dataValue.showTimeId);
+      updateTheatre.booked = false;
+      this.setState({theatres: theatres, selectedTheatres: updatedSelectedTheatres});
     }
+    console.log(theatres);
   }
 
   onSubmit = (e) => {
     e.preventDefault();
     const {movies, editableMovie} = this.findEditableMovie();
-    const {movieImage, movieName, movieCategory, movieFormat, movieGenre} = this.state;
+    const {movieImage, movieName, movieCategory, movieFormat, movieGenre, theatres} = this.state;
 
     const mergeShowTimeIds = () => {
       let {selectedTheatres} = this.state;
@@ -101,6 +109,7 @@ class EditMovie extends Component {
       editableMovie.format = movieFormat;
       editableMovie.associatedTheatres = mergeShowTimeIds();
       localStorage.setItem('movies', JSON.stringify(movies));
+      localStorage.setItem('theatres', JSON.stringify(theatres));
       this.props.history.push('/movies');
     } else {
       this.setState({flashMessage: {type: 'danger', messages: ['Please fill out all the fields']}});
