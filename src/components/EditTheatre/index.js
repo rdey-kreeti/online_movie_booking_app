@@ -17,10 +17,10 @@ class EditTheatre extends Component {
     const {editTheatre} = this.findEditableTheatre();
     this.setState({
       hallName: editTheatre.name,
-      showtime1: editTheatre.showTimings[0] !== undefined ? editTheatre.showTimings[0].timing : '',
-      showtime2: editTheatre.showTimings[1] !== undefined ? editTheatre.showTimings[1].timing : '',
-      showtime3: editTheatre.showTimings[2] !== undefined ? editTheatre.showTimings[2].timing : '',
-      showtime4: editTheatre.showTimings[3] !== undefined ? editTheatre.showTimings[3].timing : ''
+      showtime1: editTheatre.showTimings.find(el => el.id === 1) ? editTheatre.showTimings.find(el => el.id === 1).timing : '',
+      showtime2: editTheatre.showTimings.find(el => el.id === 2) ? editTheatre.showTimings.find(el => el.id === 2).timing : '',
+      showtime3: editTheatre.showTimings.find(el => el.id === 3) ? editTheatre.showTimings.find(el => el.id === 3).timing : '',
+      showtime4: editTheatre.showTimings.find(el => el.id === 4) ? editTheatre.showTimings.find(el => el.id === 4).timing : ''
     });
   }
 
@@ -40,7 +40,7 @@ class EditTheatre extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const {theatres, editTheatre} = this.findEditableTheatre();
+    let {theatres, editTheatre} = this.findEditableTheatre();
     const {hallName, showtime1, showtime2, showtime3, showtime4} = this.state;
     let previousShowTimes = editTheatre.showTimings;
     const newShowTimes = [showtime1, showtime2, showtime3, showtime4];
@@ -49,18 +49,23 @@ class EditTheatre extends Component {
     if (hallName.trim().length && validateShowTimings.length) {
       editTheatre.name = hallName;
       [1, 2, 3, 4].map((el,index) => {
-        const previousShowTime = previousShowTimes.find(showTime => showTime.id === (index + 1))
+        const previousShowTime = previousShowTimes.find(showTime => showTime.id === (index + 1));
+
         if(!newShowTimes[index].trim().length) {
+          // should have checking for bookings against this timing
           previousShowTimes = previousShowTimes.filter(showTime => showTime.id !== (index + 1));
         } else if(previousShowTime) {
           previousShowTime.timing = newShowTimes[index];
         } else if (newShowTimes[index].trim().length) {
-          const lastCreatedId = previousShowTimes[previousShowTimes.length-1].id
-          previousShowTimes.push({id: lastCreatedId + 1, timing: newShowTimes[index], booked: false});
+          previousShowTimes.push({id: index + 1, timing: newShowTimes[index], booked: false});
         }
       })
+
+      editTheatre = theatres.find( theatre => theatre.id === editTheatre.id);
+      editTheatre.showTimings = previousShowTimes;
+
       localStorage.setItem('theatres', JSON.stringify(theatres));
-      this.props.history.push('/theatres');
+      console.log(editTheatre.showTimings);
     }
   }
 
